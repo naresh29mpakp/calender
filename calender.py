@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import calendar
 from datetime import datetime
 
 # Academic Calendar Data
@@ -16,8 +17,7 @@ data = {
         "5 Mar", "6 Mar", "7 Mar", "8 Mar", "9 Mar", "10 Mar", "11 Mar", "12 Mar", "13 Mar", "14 Mar", "15 Mar",
         "16 Mar", "17 Mar", "18 Mar", "19 Mar", "20 Mar", "21 Mar", "22 Mar", "23 Mar", "24 Mar", "25 Mar",
         "26 Mar", "27 Mar", "28 Mar", "29 Mar", "30 Mar", "31 Mar", "1 Apr", "2 Apr", "3 Apr", "4 Apr", "5 Apr",
-        "6 Apr", "7 Apr", "8 Apr", "9 Apr", "10 Apr", "11 Apr", "12 Apr", "13 Apr", "14 Apr", "15 Apr", "16 Apr",
-        "17 Apr"
+        "6 Apr", "7 Apr", "8 Apr", "9 Apr", "10 Apr", "11 Apr", "12 Apr", "13 Apr", "14 Apr", "15 Apr", "16 Apr"
     ],
     "Details": [
         "First Instructional Day", "Instructional Day (Monday Day Order)", "Instructional Day", "Instructional Day",
@@ -45,9 +45,7 @@ data = {
         "CAT - II (Exam Day)", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
         "Instructional Day", "Instructional Day", "Instructional Day (Monday Day Order)", "No Instructional Day (Telugu New Year)",
         "Holiday (Ramzan)", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
-        "Instructional Day (Last for lab)", "Instructional Day", "Instructional Day", "Instructional Day",
-        "Instructional Day", "Instructional Day", "Instructional Day (Tuesday Day Order)", "Instructional Day",
-        "Holiday (Tamil New Year)", "Instructional Day", "Instructional Day", "Instructional Day (Last for theory)"
+        "Instructional Day (Last for lab)", "Instructional Day", "Instructional Day", "Instructional Day"
     ]
 }
 
@@ -60,12 +58,16 @@ calendar_df["Month"] = calendar_df["Date"].dt.strftime("%B")
 # Streamlit App
 st.title("Academic Calendar Viewer")
 
-# Dropdown for Month Selection
-selected_month = st.selectbox("Select a Month", sorted(calendar_df["Month"].unique()))
+# Sidebar Options
+selected_month = st.sidebar.selectbox("Select a Month", sorted(calendar_df["Month"].unique()))
 
-# Filter by Selected Month
-filtered_df = calendar_df[calendar_df["Month"] == selected_month]
+# Generate Calendar View
+def generate_calendar(month):
+    month_index = list(calendar.month_name).index(month)
+    cal = calendar.TextCalendar()
+    calendar_str = cal.formatmonth(2024, month_index)
+    return calendar_str
 
-# Display as Table
-st.write(f"Academic Calendar for {selected_month}")
-st.table(filtered_df[["Date", "Details"]])
+# Display Results
+st.header(f"Academic Calendar for {selected_month}")
+st.code(generate_calendar(selected_month), language="text")
