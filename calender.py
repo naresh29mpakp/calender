@@ -28,16 +28,20 @@ data = {
         "Instructional Day", "Instructional Day (Friday Day Order)", "Instructional Day", "Instructional Day", "Instructional Day",
         "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
         "Instructional Day (Tuesday Day Order)", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
-        "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day (Wednesday Day Order)",
         "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
-        "Instructional Day (Monday Day Order)", "No Instructional Day (Telugu New Year)", "Holiday (Ramzan)", "Instructional Day",
-        "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day (Last for lab)",
+        "Instructional Day", "Holiday (Tamil New Year)", "Instructional Day", "Instructional Day", "Instructional Day (Last for theory)",
+        "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
+        "Instructional Day", "Holiday (Ramzan)", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
+        "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
         "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day", "Instructional Day",
         "Instructional Day", "Holiday (Tamil New Year)", "Instructional Day", "Instructional Day", "Instructional Day (Last for theory)"
     ]
 }
 
-# Create a pandas DataFrame
+# Fix the length of the lists if there's an extra item in the 'Details' list
+data['Details'] = data['Details'][:len(data['Date'])]
+
+# Create the pandas DataFrame
 schedule_df = pd.DataFrame(data)
 
 # Display the table in Streamlit
