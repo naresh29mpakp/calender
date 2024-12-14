@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import calendar
 from datetime import datetime
 
 # Academic Calendar Data
@@ -56,33 +57,20 @@ calendar_df = pd.DataFrame(data)
 calendar_df["Date"] = calendar_df["Date"] + " 2024"
 calendar_df["Date"] = pd.to_datetime(calendar_df["Date"], format="%d %b %Y")
 calendar_df["Month"] = calendar_df["Date"].dt.strftime("%B")
-calendar_df["Day_Type"] = calendar_df["Details"].apply(
-    lambda x: "Instructional Day" if "Instructional" in x else "Non-Instructional Day"
-)
 
 # Streamlit App
 st.title("Academic Calendar Viewer")
 
 # Sidebar Options
 selected_month = st.sidebar.selectbox("Select a Month", sorted(calendar_df["Month"].unique()))
-selected_day_type = st.sidebar.selectbox(
-    "Select Day Type", ["All", "Instructional Day", "Non-Instructional Day"]
-)
 
-# Filter Data
-filtered_df = calendar_df[calendar_df["Month"] == selected_month]
-if selected_day_type != "All":
-    filtered_df = filtered_df[filtered_df["Day_Type"] == selected_day_type]
+# Generate Calendar View
+def generate_calendar(month):
+    month_index = list(calendar.month_name).index(month)
+    cal = calendar.TextCalendar()
+    calendar_str = cal.formatmonth(2024, month_index)
+    return calendar_str
 
 # Display Results
 st.header(f"Academic Calendar for {selected_month}")
-st.table(filtered_df[["Date", "Details"]])
-
-# Button to Display Totals
-if st.button("Show Summary"):
-    total_instructional = len(calendar_df[(calendar_df["Month"] == selected_month) & (calendar_df["Day_Type"] == "Instructional Day")])
-    total_non_instructional = len(calendar_df[(calendar_df["Month"] == selected_month) & (calendar_df["Day_Type"] == "Non-Instructional Day")])
-
-    st.write(f"### Summary for {selected_month}")
-    st.write(f"- Total Instructional Days: {total_instructional}")
-    st.write(f"- Total Non-Instructional Days: {total_non_instructional}")
+st.code(generate_calendar(selected_month), language="text")
