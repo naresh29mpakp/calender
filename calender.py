@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import calendar
 from datetime import datetime
 
 # Academic Calendar Data
@@ -61,16 +60,12 @@ calendar_df["Month"] = calendar_df["Date"].dt.strftime("%B")
 # Streamlit App
 st.title("Academic Calendar Viewer")
 
-# Sidebar Options
-selected_month = st.sidebar.selectbox("Select a Month", sorted(calendar_df["Month"].unique()))
+# Dropdown for Month Selection
+selected_month = st.selectbox("Select a Month", sorted(calendar_df["Month"].unique()))
 
-# Generate Calendar View
-def generate_calendar(month):
-    month_index = list(calendar.month_name).index(month)
-    cal = calendar.TextCalendar()
-    calendar_str = cal.formatmonth(2024, month_index)
-    return calendar_str
+# Filter by Selected Month
+filtered_df = calendar_df[calendar_df["Month"] == selected_month]
 
-# Display Results
-st.header(f"Academic Calendar for {selected_month}")
-st.code(generate_calendar(selected_month), language="text")
+# Display as Table
+st.write(f"Academic Calendar for {selected_month}")
+st.table(filtered_df[["Date", "Details"]])
